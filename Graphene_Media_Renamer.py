@@ -2,15 +2,17 @@
 import os, sys, re
 
 
-
-
-
+# Picture formates - Lists
 png_list = []
 jpg_list = []
 jpeg_list = []
 
-
+# Video formates - Lists
 mp4_list = []
+
+# Audio formates - Lists
+mp3_list = []
+oog_list = []
 
 # Acceptable input
 reject = ['0', 'n', "no", 'false', 'disabled', 'disable', 'reject', 'deactivate', 'off']
@@ -27,12 +29,14 @@ while 1:
         print('Directory exists, searching for formates...')
 
         # Searches for valid formates and puts them to lists
+
+        # simplify
         for x in os.listdir(working_directory):
             if x.endswith(".png"):
                 png_list.append(x)
             if x.endswith(".jpg"):
                 jpg_list.append(x)
-            if x.endswith("jpeg"):
+            if x.endswith(".jpeg"):
                 jpeg_list.append(x)
             if x.endswith(".mp4"):
                 mp4_list.append(x)
@@ -61,7 +65,7 @@ while 1:
 
 # Debugging//Extra information?
 while 1:
-    debugging = input("Enable debugging? (y/n)   ").lower()
+    debugging = input("Enable debugging? (y/n) --> ").lower()
     if debugging in accept:  
         print('Debugging enabled.')
         break
@@ -70,81 +74,38 @@ while 1:
         break
     print('Invalid input. Please try again. ("y" or "n")')
 
+target_path = working_directory + "/_rename"
 
-#  Might not need this? 
-while 1: 
-    interactive = input("Enable interactive mode? (y/n)   ").lower()
-    if interactive == "y":
-        print('Interactive mode enabled.')
-        break
-    if interactive == "n":
-        print('Interactive mode disabled.')
-        break
-    print('Invalid input. Please try again. ("y" or "n")')
+# Create new folder for renamed files  
+#
+# (copy over files before? Or create COPY to create? )
+# because the script takes the original file, renames it and moves it (i.e., no backup).
 
-file_list = []
-file_list_img = []
-file_list_vid = []
+def media_search(media,):  
+    for files in media:   # Cycle through IMAGE files. 
+            # Split filename
+            file_name = re.split("[_.-]" , files)
+            date_index = file_name[1]
+            time_index = file_name[2]
+            file_extension = file_name[3]
 
-
-target_dir = "_rename"
-target_path = working_directory + "/" + target_dir
-
-def media_search(media_split):
-    media_search_list=[]
-    
-    for files in file_list:
-        if media_split.upper() in files.upper():    #os.path.isfile(os.path.join(working_directory, files) & a.upper == "img"): #Totale images in path 
-            media_search_list.append(files)
-
-        print("There are " + str(len(media_search_list)) + "files containint " + media_split + " formate.")
-
-    for files in media_search_list: # Cycle through IMAGE files. 
-        if () in media_search_list.upper():
-
-            date_index = re.split("[_.-]" , files)[1]  # Split based on standard formate 
-            if date_index.isnumeric():
-                year_split = date_index[0:4]
-                month_split = date_index[4:6]
-                day_split = date_index[6:8]
-                date_formate = year_split + "." + month_split + "." + day_split
-                print("Date value for this file is: " + date_formate)
-            else: 
-                #if interactive == 'y':
-                    #
-                if interactive == 'n':
-                    year_split = "YYYY"
-                    month_split = "MM"
-                    day_split = "DD"
-                    date_formate = year_split + "." + month_split + "." + day_split + "+" + date_index + "+"
-                    print("String split returned with: " + date_index)
-                    print("Invalid formate or date not found. Using unknown date formate: " + date_formate)
-
-            #Time splitting  ---  Checks whether there is time information by excluding alphabetic input (ifnot set to unknown time)
-            time_index = re.split("[_.-]" , files)[2]  # Split based on standard formate
-            if time_index.isnumeric():
-                hour_split = time_index[0:2] 
-                min_split = time_index[2:4]
-                sec_split = time_index[4:6]
-                time_formate = hour_split + "." + min_split + "." + sec_split
-                print("Time value for this file is: " + time_formate)
-            else: 
-                #if interactive == 'y':
-                    #
-                #if interactive == 'n':
-                hour_split = "HH"
-                min_split = "MM"
-                sec_split = "SS"
-                time_formate = hour_split + "." + min_split + "." + sec_split + "+" + time_index + "+"
-                print("String split returned with: " + time_index)
-                print("Invalid formate or time not found. Using unknown time formate: " + time_formate)
+            if debugging == True:
+                print("String split: " + file_name)
+                print("Date index : " + date_index)
+                print("Time index : " + time_index)
+                print("File extension : " + file_extension)
+                print("")
             
-            #File extension
-            file_extension = "." + re.split("[_.-]" , files)[3]
-            print("The file extension for this file is: " + str(file_extension))
-
-            #Rename shorthand
+            date_formate = date_index[0:4] + "." + date_index[4:6] + "." + date_index[6:8]
+            time_formate = time_index[0:2]  + "." + time_index[2:4] + "." + time_index[4:6]
             new_date_formate = date_formate + "_" + time_formate + "--" + "P4a" + file_extension 
+            
+            if debugging == True: 
+                print("New date formate : " + date_formate)
+                print("New time formate : " + time_formate)
+                print("New file formate : " + new_date_formate)
+                print("")
+
             source = working_directory + "/" + files
             target = working_directory + "/" + target_dir + "/" + new_date_formate
             
@@ -159,18 +120,7 @@ def media_search(media_split):
                 print("File will be renamed to: " + new_date_formate)
                 print ("")
 
-            if interactive == "y":    
-                while True:
-                    accept_img_change = input('Do you accept these changes? (y/n)')
-                    if accept_img_change == "y":
-                        print("Renaming...")
-                        break
-                    if accept_img_change == "n": 
-                        print("Not renaming file...")
-                        break
-                    print('Invalid input. Please try again. ("y" or "n")')
-            if interactive == 'n':
-                accept_img_change = 'y' 
-            if accept_img_change =="y": 
-                os.rename(source, target)
+            # rename
+            os.rename(source, target)
+            if debugging == True:
                 print('File renamed.')
