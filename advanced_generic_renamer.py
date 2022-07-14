@@ -5,10 +5,10 @@ import os, sys, re
 # Picture formates - Lists
 png_list = []
 jpg_list = []
-jpeg_list = []
+picture_list = []
 
 # Video formates - Lists
-mp4_list = []
+video_list = []
 
 # Audio formates - Lists
 mp3_list = []
@@ -36,16 +36,16 @@ while 1:
             if x.endswith(".jpg"):
                 jpg_list.append(x)
             if x.endswith("jpeg"):
-                jpeg_list.append(x)
+                picture_list.append(x)
             if x.endswith(".mp4"):
-                mp4_list.append(x)
+                video_list.append(x)
         
         # Sum the amount of valid file formates
-        file_count = len(png_list) + len(jpg_list) + len(jpeg_list) + len(mp4_list) 
+        file_list = len(png_list) + len(jpg_list) + len(picture_list) + len(video_list) 
         
         # Breaks if more than 1 valid formate found
-        if file_count >= 1: 
-            print(file_count + " valid file formate found.")
+        if file_list >= 1: 
+            print(file_list + " valid file formate found.")
             break
 
         # If no valid file formates found, try a different directory
