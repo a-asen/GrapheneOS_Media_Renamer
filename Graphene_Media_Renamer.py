@@ -8,7 +8,11 @@ accept = ["1", "y", "ye", "yep", "yeah", "true", "enable", "enabled", "accept", 
 
 ################
 ###   Temp   ### 
+
+
 renamer = False # Toggles:
+
+
 def hold(string): # Hold 
     while 1:
         print("")
@@ -34,8 +38,7 @@ audio_list = [] # Audio recordings
 
 # Ensure valid working directory (contains any valid formates)
 while 1:
-    working_directory = "D:\.OnHold\.Sync_T_Sch"
-    # working_directory = input('Working directory? (paste full path) --> ')
+    working_directory = input('Working directory? (paste full path) --> ')
     no_valid_files = False 
     
     # If directory exists 
@@ -45,15 +48,13 @@ while 1:
         # Searches for valid formates and puts them to lists
         for x in os.listdir(working_directory):
             # Basic GrapheneOS media formate things
-            if x.endswith(".jpeg"):
+            if x.endswith(".jpg" or ".png"):
                 picture_list.append(x)
                 media_list.append(x)
             if x.endswith(".mp4"):
                 video_list.append(x)
                 media_list.append(x)
-            if "screen" in x.lower(): # Because same extension as .mp4
-                screenrecording_list.append(x)
-                media_list.append(x)
+                
             # Additional program
             if x.endswith(".ogg"):
                 audio_list.append(x)
@@ -122,7 +123,7 @@ if copying == True:
         print("Rename already exists... Skipping.")
         print("")
 
-for files in media_list:   
+for files in media_list:
     file_and_extension = os.path.splitext(files)   # Thing that split by "name" and "extension" -- doesn't really matter, but cool 
     file_name = re.split("[_.-]" , file_and_extension[0])
     date_index = file_name[1]
@@ -140,7 +141,7 @@ for files in media_list:
     time_formate = time_index[0:2]  + "." + time_index[2:4] + "." + time_index[4:6]
     new_date_formate = date_formate + "_" + time_formate + "--" + "P4a" + file_and_extension[1] 
     
-    if debugging == True: 
+    if debugging == True:
         print("New date formate: " + date_formate)
         print("New time formate: " + time_formate)
         print("New file formate: " + new_date_formate)
@@ -192,5 +193,7 @@ for files in media_list:
                 print("File renamed.")
         if renamer == False:
             print("End of the line...")
-    hold("Proceed to the next file?")
+
+
+    # hold("Exit script?")
     
